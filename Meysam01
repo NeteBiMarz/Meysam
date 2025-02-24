@@ -1,1 +1,1 @@
-warp://188.114.97.97:4198?ifp=20-40&ifps=40-100&ifpd=4-8&ifpm=m4#Meysam01
+warp://188.114.97.97:4198?ifp=40-80&ifps=40-100&ifpd=4-8&ifpm=m4#S01&&detour=warp://auto?ifp=40-80&ifps=40-100&ifpd=4-8&ifpm=m3#S02
