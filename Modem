@@ -1,203 +1,6 @@
 [
     {
-        "remarks": "💦 1 - VLESS - Upstream Proxy",
-        "version": {
-            "min": "26.2.6"
-        },
-        "log": {
-            "loglevel": "warning"
-        },
-        "dns": {
-            "servers": [
-                {
-                    "address": "https://8.8.8.8/dns-query",
-                    "tag": "remote-dns"
-                }
-            ],
-            "queryStrategy": "UseIP",
-            "tag": "dns"
-        },
-        "inbounds": [
-            {
-                "listen": "127.0.0.1",
-                "port": 10808,
-                "protocol": "mixed",
-                "settings": {
-                    "auth": "noauth",
-                    "udp": true
-                },
-                "sniffing": {
-                    "destOverride": [
-                        "http",
-                        "tls"
-                    ],
-                    "enabled": true,
-                    "routeOnly": true
-                },
-                "tag": "mixed-in"
-            },
-            {
-                "listen": "127.0.0.1",
-                "port": 10853,
-                "protocol": "dokodemo-door",
-                "settings": {
-                    "address": "1.1.1.1",
-                    "network": "tcp,udp",
-                    "port": 53
-                },
-                "tag": "dns-in"
-            }
-        ],
-        "outbounds": [
-            {
-                "protocol": "vless",
-                "settings": {
-                    "vnext": [
-                        {
-                            "address": "127.0.0.1",
-                            "port": 40443,
-                            "users": [
-                                {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
-                                    "encryption": "none"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                "streamSettings": {
-                    "network": "ws",
-                    "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiTUJEUkZnNjJMIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
-                    },
-                    "security": "tls",
-                    "tlsSettings": {
-                        "serverName": "ModEm.meYsamGZ003.WORkERs.DeV",
-                        "fingerprint": "chrome",
-                        "alpn": [
-                            "http/1.1"
-                        ]
-                    },
-                    "sockopt": {
-                        "domainStrategy": "UseIP",
-                        "happyEyeballs": {
-                            "tryDelayMs": 250,
-                            "prioritizeIPv6": false,
-                            "interleave": 2,
-                            "maxConcurrentTry": 4
-                        }
-                    }
-                },
-                "tag": "proxy"
-            },
-            {
-                "protocol": "dns",
-                "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
-                },
-                "tag": "dns-out"
-            },
-            {
-                "protocol": "freedom",
-                "settings": {
-                    "domainStrategy": "UseIP"
-                },
-                "tag": "direct"
-            },
-            {
-                "protocol": "blackhole",
-                "settings": {
-                    "response": {
-                        "type": "http"
-                    }
-                },
-                "tag": "block"
-            }
-        ],
-        "routing": {
-            "domainStrategy": "IPIfNonMatch",
-            "rules": [
-                {
-                    "inboundTag": [
-                        "mixed-in"
-                    ],
-                    "port": 53,
-                    "outboundTag": "dns-out",
-                    "type": "field"
-                },
-                {
-                    "inboundTag": [
-                        "dns-in"
-                    ],
-                    "outboundTag": "dns-out",
-                    "type": "field"
-                },
-                {
-                    "inboundTag": [
-                        "remote-dns"
-                    ],
-                    "outboundTag": "proxy",
-                    "type": "field"
-                },
-                {
-                    "inboundTag": [
-                        "dns"
-                    ],
-                    "outboundTag": "direct",
-                    "type": "field"
-                },
-                {
-                    "domain": [
-                        "geosite:private"
-                    ],
-                    "outboundTag": "direct",
-                    "type": "field"
-                },
-                {
-                    "ip": [
-                        "geoip:private"
-                    ],
-                    "outboundTag": "direct",
-                    "type": "field"
-                },
-                {
-                    "network": "udp",
-                    "outboundTag": "block",
-                    "type": "field"
-                },
-                {
-                    "network": "tcp",
-                    "outboundTag": "proxy",
-                    "type": "field"
-                }
-            ]
-        },
-        "policy": {
-            "levels": {
-                "0": {
-                    "connIdle": 300,
-                    "handshake": 4,
-                    "uplinkOnly": 1,
-                    "downlinkOnly": 1
-                }
-            },
-            "system": {
-                "statsOutboundUplink": true,
-                "statsOutboundDownlink": true
-            }
-        },
-        "stats": {}
-    },
-    {
-        "remarks": "💦 2 - VLESS - Domain : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server01",
         "log": {
             "loglevel": "warning"
         },
@@ -210,7 +13,7 @@
                 {
                     "address": "8.8.8.8",
                     "domains": [
-                        "full:modem.meysamgz003.workers.dev"
+                        "full:m206.netebimarz.workers.dev"
                     ],
                     "skipFallback": true
                 }
@@ -222,7 +25,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -255,11 +58,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "modem.meysamgz003.workers.dev",
+                            "address": "m206.netebimarz.workers.dev",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -269,8 +72,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiRmJHNFZ6NGo5cCIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiSzBCN0hZaDlFdHREZiIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -288,11 +91,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -388,10 +187,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 3 - VLESS - Domain : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server02",
         "log": {
             "loglevel": "warning"
         },
@@ -416,7 +212,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -453,7 +249,7 @@
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -463,8 +259,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoia2dOS2s4N1paQWFySCIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWFVvUTJrbDkxS1hXY3IyIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -482,11 +278,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -582,10 +374,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 4 - VLESS - IPv4 : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server03",
         "log": {
             "loglevel": "warning"
         },
@@ -603,7 +392,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -636,11 +425,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "104.21.42.33",
+                            "address": "104.21.44.21",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -650,8 +439,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiaDFaSFBQOU5Ha3FvQU4iLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiZ3ptd0ZhQjM5Mmh6dHFiIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -669,11 +458,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -769,10 +554,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 5 - VLESS - IPv4 : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server04",
         "log": {
             "loglevel": "warning"
         },
@@ -790,7 +572,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -823,11 +605,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "172.67.199.187",
+                            "address": "172.67.193.244",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -837,8 +619,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiMFFLNDJQTVFWIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiSlNHdVhHd2NzVjJObHMiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -856,11 +638,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -956,10 +734,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 6 - VLESS - IPv6 : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server05",
         "log": {
             "loglevel": "warning"
         },
@@ -977,7 +752,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -1010,11 +785,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "[2606:4700:3035::6815:2a21]",
+                            "address": "[2606:4700:3036::6815:2c15]",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -1024,8 +799,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiTnRneG85ZElhMnNDIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiZWxNdUV6ekI2TiIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -1043,11 +818,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -1143,10 +914,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 7 - VLESS - IPv6 : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server06",
         "log": {
             "loglevel": "warning"
         },
@@ -1164,7 +932,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -1197,11 +965,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "[2606:4700:3033::ac43:c7bb]",
+                            "address": "[2606:4700:3031::ac43:c1f4]",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -1211,8 +979,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiaDRJQzk4NzhjcExwSiIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiQVk3RWtYTklHM1VEUE5CIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -1230,11 +998,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -1330,10 +1094,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 8 - VLESS - Clean IP : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server07",
         "log": {
             "loglevel": "warning"
         },
@@ -1351,7 +1112,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -1384,11 +1145,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "104.24.48.199",
+                            "address": "162.159.6.32",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -1398,8 +1159,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiWlF4NGRoMjg1SEFDcSIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWmg0M3RobUk4YkwiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -1417,11 +1178,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -1517,10 +1274,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 9 - VLESS - Clean IP : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server08",
         "log": {
             "loglevel": "warning"
         },
@@ -1538,7 +1292,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -1571,11 +1325,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "141.101.120.210",
+                            "address": "172.66.160.143",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -1585,8 +1339,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiNFpGT0tPUDIiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiQWJKY05iTzE4OHFPZ2tEIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -1604,11 +1358,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -1704,10 +1454,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 10 - VLESS - Clean IP : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server09",
         "log": {
             "loglevel": "warning"
         },
@@ -1725,7 +1472,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -1758,11 +1505,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "162.159.195.98",
+                            "address": "104.24.3.55",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -1772,8 +1519,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiZ3Vrd2d0dFd6cXYiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiMlJTeENYM3VFT2YiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -1791,11 +1538,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -1891,10 +1634,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 11 - VLESS - Domain : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server10",
         "log": {
             "loglevel": "warning"
         },
@@ -1907,7 +1647,7 @@
                 {
                     "address": "8.8.8.8",
                     "domains": [
-                        "full:modem.meysamgz003.workers.dev"
+                        "full:m206.netebimarz.workers.dev"
                     ],
                     "skipFallback": true
                 }
@@ -1919,7 +1659,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -1952,11 +1692,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "modem.meysamgz003.workers.dev",
+                            "address": "m206.netebimarz.workers.dev",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -1966,16 +1706,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiUmc4OEZoQ1kiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiTFpXUDgxZkJydyIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "MoDem.mEysaMgz003.workeRs.deV",
+                        "serverName": "m206.netEbIMaRz.woRKeRs.dev",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -1992,11 +1733,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -2092,10 +1829,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 12 - VLESS - Domain : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server11",
         "log": {
             "loglevel": "warning"
         },
@@ -2120,7 +1854,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -2157,7 +1891,7 @@
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -2167,16 +1901,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiRkFrUlNYbXpYMSIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWWp2RnJPWWpKY1c1aXJWSSIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "MOdEm.meYSamGZ003.worKERs.DeV",
+                        "serverName": "m206.nETebIMARZ.wORkErs.DEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -2193,11 +1928,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -2293,10 +2024,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 13 - VLESS - IPv4 : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server12",
         "log": {
             "loglevel": "warning"
         },
@@ -2314,7 +2042,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -2347,11 +2075,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "104.21.42.33",
+                            "address": "104.21.44.21",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -2361,16 +2089,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoidzVRMExyeUtxazQ0MUMiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiQnQyUUlsaFNlVXMiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "moDeM.MeySAMGZ003.WorKERS.dEv",
+                        "serverName": "m206.nEtEBIMaRz.WorKERS.dev",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -2387,11 +2116,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -2487,10 +2212,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 14 - VLESS - IPv4 : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server13",
         "log": {
             "loglevel": "warning"
         },
@@ -2508,7 +2230,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -2541,11 +2263,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "172.67.199.187",
+                            "address": "172.67.193.244",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -2555,16 +2277,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoibWxyZWtsakx2IiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiMElPMkI4cHhmdSIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "ModeM.mEysamGZ003.WoRKeRs.dEv",
+                        "serverName": "M206.NeTeBimarZ.woRkERs.dEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -2581,11 +2304,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -2681,10 +2400,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 15 - VLESS - IPv6 : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server14",
         "log": {
             "loglevel": "warning"
         },
@@ -2702,7 +2418,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -2735,11 +2451,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "[2606:4700:3035::6815:2a21]",
+                            "address": "[2606:4700:3036::6815:2c15]",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -2749,16 +2465,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiSnBxdFJYZWRrIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiUk5mUXZWYlYiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "mOdEm.mEySaMGz003.WoRKERS.DEv",
+                        "serverName": "M206.NETeBimArZ.WOrkerS.dev",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -2775,11 +2492,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -2875,10 +2588,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 16 - VLESS - IPv6 : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server15",
         "log": {
             "loglevel": "warning"
         },
@@ -2896,7 +2606,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -2929,11 +2639,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "[2606:4700:3033::ac43:c7bb]",
+                            "address": "[2606:4700:3031::ac43:c1f4]",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -2943,16 +2653,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoib2d6Mmpha1JPRyIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiTUZ0RlNna0pnNCIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "moDEm.MeYsAmgz003.WORKErs.DEv",
+                        "serverName": "m206.NetEbImArZ.wOrkERs.dEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -2969,11 +2680,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -3069,10 +2776,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 17 - VLESS - Clean IP : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server16",
         "log": {
             "loglevel": "warning"
         },
@@ -3090,7 +2794,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -3123,11 +2827,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "104.24.48.199",
+                            "address": "162.159.6.32",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -3137,16 +2841,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiOGJmRVJmY3l3eE9CIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoieFNBRjd6TUhPbiIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "mOdeM.MEySaMGZ003.WoRKerS.DEV",
+                        "serverName": "m206.NetEbimarZ.WorKerS.DEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -3163,11 +2868,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -3263,10 +2964,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 18 - VLESS - Clean IP : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server17",
         "log": {
             "loglevel": "warning"
         },
@@ -3284,7 +2982,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -3317,11 +3015,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "141.101.120.210",
+                            "address": "172.66.160.143",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -3331,16 +3029,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiNFJaMUNTaFowRFVEZ0JDSyIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiV2s0dGlQd3A0dyIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "mODem.MeYsaMGZ003.workeRS.DEv",
+                        "serverName": "m206.NETeBiMarZ.WOrKers.DEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -3357,11 +3056,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -3457,10 +3152,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 19 - VLESS - Clean IP : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server18",
         "log": {
             "loglevel": "warning"
         },
@@ -3478,7 +3170,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -3511,11 +3203,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "162.159.195.98",
+                            "address": "104.24.3.55",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -3525,16 +3217,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiSUcwV1JSbnFjRGYiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoieFBTTXJJTEx0Q1BmIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "MOdem.MeySamGZ003.WORKErs.DeV",
+                        "serverName": "M206.NeTeBimarz.wORkErs.dEV",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -3551,11 +3244,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -3651,199 +3340,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 1 - Trojan - Upstream Proxy",
-        "version": {
-            "min": "26.2.6"
-        },
-        "log": {
-            "loglevel": "warning"
-        },
-        "dns": {
-            "servers": [
-                {
-                    "address": "https://8.8.8.8/dns-query",
-                    "tag": "remote-dns"
-                }
-            ],
-            "queryStrategy": "UseIP",
-            "tag": "dns"
-        },
-        "inbounds": [
-            {
-                "listen": "127.0.0.1",
-                "port": 10808,
-                "protocol": "mixed",
-                "settings": {
-                    "auth": "noauth",
-                    "udp": true
-                },
-                "sniffing": {
-                    "destOverride": [
-                        "http",
-                        "tls"
-                    ],
-                    "enabled": true,
-                    "routeOnly": true
-                },
-                "tag": "mixed-in"
-            },
-            {
-                "listen": "127.0.0.1",
-                "port": 10853,
-                "protocol": "dokodemo-door",
-                "settings": {
-                    "address": "1.1.1.1",
-                    "network": "tcp,udp",
-                    "port": 53
-                },
-                "tag": "dns-in"
-            }
-        ],
-        "outbounds": [
-            {
-                "protocol": "trojan",
-                "settings": {
-                    "servers": [
-                        {
-                            "address": "127.0.0.1",
-                            "port": 40443,
-                            "password": "W7Qz@8]I}a[qPAAU"
-                        }
-                    ]
-                },
-                "streamSettings": {
-                    "network": "ws",
-                    "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiNm5nemh3UW1CTWdZIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
-                    },
-                    "security": "tls",
-                    "tlsSettings": {
-                        "serverName": "mODeM.MeySaMgZ003.woRKeRS.Dev",
-                        "fingerprint": "chrome",
-                        "alpn": [
-                            "http/1.1"
-                        ]
-                    },
-                    "sockopt": {
-                        "domainStrategy": "UseIP",
-                        "happyEyeballs": {
-                            "tryDelayMs": 250,
-                            "prioritizeIPv6": false,
-                            "interleave": 2,
-                            "maxConcurrentTry": 4
-                        }
-                    }
-                },
-                "tag": "proxy"
-            },
-            {
-                "protocol": "dns",
-                "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
-                },
-                "tag": "dns-out"
-            },
-            {
-                "protocol": "freedom",
-                "settings": {
-                    "domainStrategy": "UseIP"
-                },
-                "tag": "direct"
-            },
-            {
-                "protocol": "blackhole",
-                "settings": {
-                    "response": {
-                        "type": "http"
-                    }
-                },
-                "tag": "block"
-            }
-        ],
-        "routing": {
-            "domainStrategy": "IPIfNonMatch",
-            "rules": [
-                {
-                    "inboundTag": [
-                        "mixed-in"
-                    ],
-                    "port": 53,
-                    "outboundTag": "dns-out",
-                    "type": "field"
-                },
-                {
-                    "inboundTag": [
-                        "dns-in"
-                    ],
-                    "outboundTag": "dns-out",
-                    "type": "field"
-                },
-                {
-                    "inboundTag": [
-                        "remote-dns"
-                    ],
-                    "outboundTag": "proxy",
-                    "type": "field"
-                },
-                {
-                    "inboundTag": [
-                        "dns"
-                    ],
-                    "outboundTag": "direct",
-                    "type": "field"
-                },
-                {
-                    "domain": [
-                        "geosite:private"
-                    ],
-                    "outboundTag": "direct",
-                    "type": "field"
-                },
-                {
-                    "ip": [
-                        "geoip:private"
-                    ],
-                    "outboundTag": "direct",
-                    "type": "field"
-                },
-                {
-                    "network": "udp",
-                    "outboundTag": "block",
-                    "type": "field"
-                },
-                {
-                    "network": "tcp",
-                    "outboundTag": "proxy",
-                    "type": "field"
-                }
-            ]
-        },
-        "policy": {
-            "levels": {
-                "0": {
-                    "connIdle": 300,
-                    "handshake": 4,
-                    "uplinkOnly": 1,
-                    "downlinkOnly": 1
-                }
-            },
-            "system": {
-                "statsOutboundUplink": true,
-                "statsOutboundDownlink": true
-            }
-        },
-        "stats": {}
-    },
-    {
-        "remarks": "💦 2 - Trojan - Domain : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server19",
         "log": {
             "loglevel": "warning"
         },
@@ -3856,7 +3353,7 @@
                 {
                     "address": "8.8.8.8",
                     "domains": [
-                        "full:modem.meysamgz003.workers.dev"
+                        "full:m206.netebimarz.workers.dev"
                     ],
                     "skipFallback": true
                 }
@@ -3868,7 +3365,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -3901,17 +3398,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "modem.meysamgz003.workers.dev",
+                            "address": "m206.netebimarz.workers.dev",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiNERSdXlMUG5RIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiNUo0VXU4VnNhZFRtQXFyRCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -3929,11 +3426,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -4029,10 +3522,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 3 - Trojan - Domain : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server20",
         "log": {
             "loglevel": "warning"
         },
@@ -4057,7 +3547,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -4092,15 +3582,15 @@
                         {
                             "address": "www.speedtest.net",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiSDRaOXVvUmhOIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiN0hwbDZCN1FuTkRxcSIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -4118,11 +3608,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -4218,10 +3704,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 4 - Trojan - IPv4 : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server21",
         "log": {
             "loglevel": "warning"
         },
@@ -4239,7 +3722,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -4272,17 +3755,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "104.21.42.33",
+                            "address": "104.21.44.21",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiaXhnMlhOTzBwSk4iLCJwcm90b2NvbCI6InRyIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWjlxb05JOUd0IiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -4300,11 +3783,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -4400,10 +3879,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 5 - Trojan - IPv4 : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server22",
         "log": {
             "loglevel": "warning"
         },
@@ -4421,7 +3897,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -4454,17 +3930,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "172.67.199.187",
+                            "address": "172.67.193.244",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiR3VKakZhUGY1NCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiZHdqaXJxTW9wIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -4482,11 +3958,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -4582,10 +4054,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 6 - Trojan - IPv6 : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server23",
         "log": {
             "loglevel": "warning"
         },
@@ -4603,7 +4072,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -4636,17 +4105,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "[2606:4700:3035::6815:2a21]",
+                            "address": "[2606:4700:3036::6815:2c15]",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoid2hyc1ZpRE9jMmtKQnRhIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoielRoc0d4OTQiLCJwcm90b2NvbCI6InRyIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -4664,11 +4133,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -4764,10 +4229,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 7 - Trojan - IPv6 : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server24",
         "log": {
             "loglevel": "warning"
         },
@@ -4785,7 +4247,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -4818,17 +4280,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "[2606:4700:3033::ac43:c7bb]",
+                            "address": "[2606:4700:3031::ac43:c1f4]",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiRzBJWWJpZE56aiIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiTFZtRVJ6WjVPT0N2IiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -4846,11 +4308,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -4946,10 +4404,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 8 - Trojan - Clean IP : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server25",
         "log": {
             "loglevel": "warning"
         },
@@ -4967,7 +4422,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -5000,17 +4455,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "104.24.48.199",
+                            "address": "162.159.6.32",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoia3VGVkNwRXRhNCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWFZHMzByUU90SG5uM3R0NiIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -5028,11 +4483,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -5128,10 +4579,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 9 - Trojan - Clean IP : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server26",
         "log": {
             "loglevel": "warning"
         },
@@ -5149,7 +4597,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -5182,17 +4630,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "141.101.120.210",
+                            "address": "172.66.160.143",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoieEZ6OGxlZFpKakRCMSIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiODNLWjNpbjhYQTF4OE4iLCJwcm90b2NvbCI6InRyIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -5210,11 +4658,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -5310,10 +4754,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 10 - Trojan - Clean IP : 80",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server27",
         "log": {
             "loglevel": "warning"
         },
@@ -5331,7 +4772,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -5364,17 +4805,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "162.159.195.98",
+                            "address": "104.24.3.55",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiTWRzeVVzOGVncXprWCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiQXIyUWhOSEVqIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -5392,11 +4833,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -5492,10 +4929,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 11 - Trojan - Domain : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server28",
         "log": {
             "loglevel": "warning"
         },
@@ -5508,7 +4942,7 @@
                 {
                     "address": "8.8.8.8",
                     "domains": [
-                        "full:modem.meysamgz003.workers.dev"
+                        "full:m206.netebimarz.workers.dev"
                     ],
                     "skipFallback": true
                 }
@@ -5520,7 +4954,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -5553,25 +4987,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "modem.meysamgz003.workers.dev",
+                            "address": "m206.netebimarz.workers.dev",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiaDZndUUxYXAiLCJwcm90b2NvbCI6InRyIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiT2NVMWZzRXBieERqZGFKYyIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "ModeM.meysaMgz003.WOrkers.deV",
+                        "serverName": "M206.nEtEbImaRz.wOrkerS.Dev",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -5588,11 +5023,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -5688,10 +5119,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 12 - Trojan - Domain : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server29",
         "log": {
             "loglevel": "warning"
         },
@@ -5716,7 +5144,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -5751,23 +5179,24 @@
                         {
                             "address": "www.speedtest.net",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoic2F6a1JCYWVuc3Z1S1Y2QSIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWnVVVEZVUDZHbW55UCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "modEM.MEYsamgZ003.WORkErS.DEV",
+                        "serverName": "M206.nEteBiMARZ.WORKeRs.DEV",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -5784,11 +5213,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -5884,10 +5309,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 13 - Trojan - IPv4 : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server30",
         "log": {
             "loglevel": "warning"
         },
@@ -5905,7 +5327,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -5938,25 +5360,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "104.21.42.33",
+                            "address": "104.21.44.21",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiYnFOQ1hEanRMIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoic3FBQTdSNDQiLCJwcm90b2NvbCI6InRyIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "mODeM.meYsaMgZ003.WorKers.Dev",
+                        "serverName": "m206.NeteBiMarZ.WOrKeRs.dEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -5973,11 +5396,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -6073,10 +5492,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 14 - Trojan - IPv4 : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server31",
         "log": {
             "loglevel": "warning"
         },
@@ -6094,7 +5510,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -6127,25 +5543,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "172.67.199.187",
+                            "address": "172.67.193.244",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiVlhWcjVYZDE1RiIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiTW5wZ3FVck1sIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "mODem.mEysAmGz003.workErs.dEv",
+                        "serverName": "m206.neTEbimARz.WoRkErs.deV",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -6162,11 +5579,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -6262,10 +5675,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 15 - Trojan - IPv6 : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server32",
         "log": {
             "loglevel": "warning"
         },
@@ -6283,7 +5693,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -6316,25 +5726,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "[2606:4700:3035::6815:2a21]",
+                            "address": "[2606:4700:3036::6815:2c15]",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiRHIzNnRqbUNyYm95QyIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiRmF6c2hhVDhwYmtoaURJNCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "mOdEm.meysamGZ003.WOrKErs.DEV",
+                        "serverName": "M206.NETEBimArz.WOrkERS.deV",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -6351,11 +5762,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -6451,10 +5858,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 16 - Trojan - IPv6 : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server33",
         "log": {
             "loglevel": "warning"
         },
@@ -6472,7 +5876,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -6505,25 +5909,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "[2606:4700:3033::ac43:c7bb]",
+                            "address": "[2606:4700:3031::ac43:c1f4]",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoidGRIM3M3dG13IiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoieEJMSGV4VTZleFNtVyIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "MOdeM.MeysaMgZ003.WORKERS.DEv",
+                        "serverName": "m206.NETEbimaRz.WOrkeRS.dev",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -6540,11 +5945,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -6640,10 +6041,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 17 - Trojan - Clean IP : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server34",
         "log": {
             "loglevel": "warning"
         },
@@ -6661,7 +6059,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -6694,25 +6092,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "104.24.48.199",
+                            "address": "162.159.6.32",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoibkhrdmllbDNSTFNiIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoidWtPZnJIMVpKVCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "MODEm.mEySaMGZ003.WoRKeRs.dEv",
+                        "serverName": "m206.nETEbimArZ.wOrkERs.DEV",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -6729,11 +6128,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -6829,10 +6224,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 18 - Trojan - Clean IP : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server35",
         "log": {
             "loglevel": "warning"
         },
@@ -6850,7 +6242,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -6883,25 +6275,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "141.101.120.210",
+                            "address": "172.66.160.143",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiOVlUV0x3OFRLYzV3IiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiVng5MFVtZHJBaHc1IiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "MODEM.MEysaMgz003.wOrKers.deV",
+                        "serverName": "m206.NETeBimArZ.wOrkERs.dev",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -6918,11 +6311,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -7018,10 +6407,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 19 - Trojan - Clean IP : 443",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Server36",
         "log": {
             "loglevel": "warning"
         },
@@ -7039,7 +6425,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -7072,25 +6458,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "162.159.195.98",
+                            "address": "104.24.3.55",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoicTJwaWZOODdxVDZKUCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWWprNUtvV3g3VCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "modem.meysAmgZ003.wORkers.deV",
+                        "serverName": "M206.NetEBiMARz.woRkErs.dEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -7107,11 +6494,7 @@
             {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
@@ -7207,10 +6590,7 @@
         "stats": {}
     },
     {
-        "remarks": "💦 Best Ping 🚀",
-        "version": {
-            "min": "26.2.6"
-        },
+        "remarks": "Best Server",
         "log": {
             "loglevel": "warning"
         },
@@ -7223,7 +6603,7 @@
                 {
                     "address": "8.8.8.8",
                     "domains": [
-                        "full:modem.meysamgz003.workers.dev",
+                        "full:m206.netebimarz.workers.dev",
                         "full:www.speedtest.net"
                     ],
                     "skipFallback": true
@@ -7236,7 +6616,7 @@
             {
                 "listen": "127.0.0.1",
                 "port": 10808,
-                "protocol": "mixed",
+                "protocol": "socks",
                 "settings": {
                     "auth": "noauth",
                     "udp": true
@@ -7269,11 +6649,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "127.0.0.1",
-                            "port": 40443,
+                            "address": "m206.netebimarz.workers.dev",
+                            "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7283,17 +6663,10 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiTUJEUkZnNjJMIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiSzBCN0hZaDlFdHREZiIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
-                    "security": "tls",
-                    "tlsSettings": {
-                        "serverName": "ModEm.meYsamGZ003.WORkERs.DeV",
-                        "fingerprint": "chrome",
-                        "alpn": [
-                            "http/1.1"
-                        ]
-                    },
+                    "security": "none",
                     "sockopt": {
                         "domainStrategy": "UseIP",
                         "happyEyeballs": {
@@ -7311,11 +6684,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "modem.meysamgz003.workers.dev",
+                            "address": "www.speedtest.net",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7325,8 +6698,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiRmJHNFZ6NGo5cCIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWFVvUTJrbDkxS1hXY3IyIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -7346,11 +6719,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "www.speedtest.net",
+                            "address": "104.21.44.21",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7360,8 +6733,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoia2dOS2s4N1paQWFySCIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiZ3ptd0ZhQjM5Mmh6dHFiIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -7381,11 +6754,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "104.21.42.33",
+                            "address": "172.67.193.244",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7395,8 +6768,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiaDFaSFBQOU5Ha3FvQU4iLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiSlNHdVhHd2NzVjJObHMiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -7416,11 +6789,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "172.67.199.187",
+                            "address": "[2606:4700:3036::6815:2c15]",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7430,8 +6803,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiMFFLNDJQTVFWIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiZWxNdUV6ekI2TiIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -7451,11 +6824,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "[2606:4700:3035::6815:2a21]",
+                            "address": "[2606:4700:3031::ac43:c1f4]",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7465,8 +6838,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiTnRneG85ZElhMnNDIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiQVk3RWtYTklHM1VEUE5CIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -7486,11 +6859,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "[2606:4700:3033::ac43:c7bb]",
+                            "address": "162.159.6.32",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7500,8 +6873,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiaDRJQzk4NzhjcExwSiIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWmg0M3RobUk4YkwiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -7521,11 +6894,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "104.24.48.199",
+                            "address": "172.66.160.143",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7535,8 +6908,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiWlF4NGRoMjg1SEFDcSIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiQWJKY05iTzE4OHFPZ2tEIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -7556,11 +6929,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "141.101.120.210",
+                            "address": "104.24.3.55",
                             "port": 80,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7570,8 +6943,8 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiNFpGT0tPUDIiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiMlJTeENYM3VFT2YiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -7591,11 +6964,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "162.159.195.98",
-                            "port": 80,
+                            "address": "m206.netebimarz.workers.dev",
+                            "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7605,10 +6978,18 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiZ3Vrd2d0dFd6cXYiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiTFpXUDgxZkJydyIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
-                    "security": "none",
+                    "security": "tls",
+                    "tlsSettings": {
+                        "serverName": "m206.netEbIMaRz.woRKeRs.dev",
+                        "fingerprint": "chrome",
+                        "alpn": [
+                            "http/1.1"
+                        ],
+                        "allowInsecure": false
+                    },
                     "sockopt": {
                         "domainStrategy": "UseIP",
                         "happyEyeballs": {
@@ -7626,11 +7007,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "modem.meysamgz003.workers.dev",
+                            "address": "www.speedtest.net",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7640,16 +7021,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiUmc4OEZoQ1kiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWWp2RnJPWWpKY1c1aXJWSSIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "MoDem.mEysaMgz003.workeRs.deV",
+                        "serverName": "m206.nETebIMARZ.wORkErs.DEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -7668,11 +7050,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "www.speedtest.net",
+                            "address": "104.21.44.21",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7682,16 +7064,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiRkFrUlNYbXpYMSIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiQnQyUUlsaFNlVXMiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "MOdEm.meYSamGZ003.worKERs.DeV",
+                        "serverName": "m206.nEtEBIMaRz.WorKERS.dev",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -7710,11 +7093,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "104.21.42.33",
+                            "address": "172.67.193.244",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7724,16 +7107,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoidzVRMExyeUtxazQ0MUMiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiMElPMkI4cHhmdSIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "moDeM.MeySAMGZ003.WorKERS.dEv",
+                        "serverName": "M206.NeTeBimarZ.woRkERs.dEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -7752,11 +7136,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "172.67.199.187",
+                            "address": "[2606:4700:3036::6815:2c15]",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7766,16 +7150,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoibWxyZWtsakx2IiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiUk5mUXZWYlYiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "ModeM.mEysamGZ003.WoRKeRs.dEv",
+                        "serverName": "M206.NETeBimArZ.WOrkerS.dev",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -7794,11 +7179,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "[2606:4700:3035::6815:2a21]",
+                            "address": "[2606:4700:3031::ac43:c1f4]",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7808,16 +7193,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiSnBxdFJYZWRrIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiTUZ0RlNna0pnNCIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "mOdEm.mEySaMGz003.WoRKERS.DEv",
+                        "serverName": "m206.NetEbImArZ.wOrkERs.dEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -7836,11 +7222,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "[2606:4700:3033::ac43:c7bb]",
+                            "address": "162.159.6.32",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7850,16 +7236,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoib2d6Mmpha1JPRyIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoieFNBRjd6TUhPbiIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "moDEm.MeYsAmgz003.WORKErs.DEv",
+                        "serverName": "m206.NetEbimarZ.WorKerS.DEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -7878,11 +7265,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "104.24.48.199",
+                            "address": "172.66.160.143",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7892,16 +7279,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiOGJmRVJmY3l3eE9CIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiV2s0dGlQd3A0dyIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "mOdeM.MEySaMGZ003.WoRKerS.DEV",
+                        "serverName": "m206.NETeBiMarZ.WOrKers.DEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -7920,11 +7308,11 @@
                 "settings": {
                     "vnext": [
                         {
-                            "address": "141.101.120.210",
+                            "address": "104.24.3.55",
                             "port": 443,
                             "users": [
                                 {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
+                                    "id": "30e77149-1cfa-489f-b545-29f901148239",
                                     "encryption": "none"
                                 }
                             ]
@@ -7934,16 +7322,17 @@
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiNFJaMUNTaFowRFVEZ0JDSyIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoieFBTTXJJTEx0Q1BmIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "mODem.MeYsaMGZ003.workeRS.DEv",
+                        "serverName": "M206.NeTeBimarz.wORkErs.dEV",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -7958,35 +7347,23 @@
                 "tag": "proxy-18"
             },
             {
-                "protocol": "vless",
+                "protocol": "trojan",
                 "settings": {
-                    "vnext": [
+                    "servers": [
                         {
-                            "address": "162.159.195.98",
-                            "port": 443,
-                            "users": [
-                                {
-                                    "id": "bbb30870-b26b-4a9c-8951-5f29907ac85d",
-                                    "encryption": "none"
-                                }
-                            ]
+                            "address": "m206.netebimarz.workers.dev",
+                            "port": 80,
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiSUcwV1JSbnFjRGYiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiNUo0VXU4VnNhZFRtQXFyRCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
-                    "security": "tls",
-                    "tlsSettings": {
-                        "serverName": "MOdem.MeySamGZ003.WORKErs.DeV",
-                        "fingerprint": "chrome",
-                        "alpn": [
-                            "http/1.1"
-                        ]
-                    },
+                    "security": "none",
                     "sockopt": {
                         "domainStrategy": "UseIP",
                         "happyEyeballs": {
@@ -8004,26 +7381,19 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "127.0.0.1",
-                            "port": 40443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "address": "www.speedtest.net",
+                            "port": 80,
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiNm5nemh3UW1CTWdZIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiN0hwbDZCN1FuTkRxcSIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
-                    "security": "tls",
-                    "tlsSettings": {
-                        "serverName": "mODeM.MeySaMgZ003.woRKeRS.Dev",
-                        "fingerprint": "chrome",
-                        "alpn": [
-                            "http/1.1"
-                        ]
-                    },
+                    "security": "none",
                     "sockopt": {
                         "domainStrategy": "UseIP",
                         "happyEyeballs": {
@@ -8041,17 +7411,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "modem.meysamgz003.workers.dev",
+                            "address": "104.21.44.21",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiNERSdXlMUG5RIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWjlxb05JOUd0IiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -8071,17 +7441,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "www.speedtest.net",
+                            "address": "172.67.193.244",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiSDRaOXVvUmhOIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiZHdqaXJxTW9wIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -8101,17 +7471,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "104.21.42.33",
+                            "address": "[2606:4700:3036::6815:2c15]",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiaXhnMlhOTzBwSk4iLCJwcm90b2NvbCI6InRyIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoielRoc0d4OTQiLCJwcm90b2NvbCI6InRyIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -8131,17 +7501,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "172.67.199.187",
+                            "address": "[2606:4700:3031::ac43:c1f4]",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiR3VKakZhUGY1NCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiTFZtRVJ6WjVPT0N2IiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -8161,17 +7531,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "[2606:4700:3035::6815:2a21]",
+                            "address": "162.159.6.32",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoid2hyc1ZpRE9jMmtKQnRhIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWFZHMzByUU90SG5uM3R0NiIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -8191,17 +7561,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "[2606:4700:3033::ac43:c7bb]",
+                            "address": "172.66.160.143",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiRzBJWWJpZE56aiIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiODNLWjNpbjhYQTF4OE4iLCJwcm90b2NvbCI6InRyIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -8221,17 +7591,17 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "104.24.48.199",
+                            "address": "104.24.3.55",
                             "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoia3VGVkNwRXRhNCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiQXIyUWhOSEVqIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "none",
                     "sockopt": {
@@ -8251,19 +7621,27 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "141.101.120.210",
-                            "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "address": "m206.netebimarz.workers.dev",
+                            "port": 443,
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoieEZ6OGxlZFpKakRCMSIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiT2NVMWZzRXBieERqZGFKYyIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
-                    "security": "none",
+                    "security": "tls",
+                    "tlsSettings": {
+                        "serverName": "M206.nEtEbImaRz.wOrkerS.Dev",
+                        "fingerprint": "chrome",
+                        "alpn": [
+                            "http/1.1"
+                        ],
+                        "allowInsecure": false
+                    },
                     "sockopt": {
                         "domainStrategy": "UseIP",
                         "happyEyeballs": {
@@ -8281,19 +7659,27 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "162.159.195.98",
-                            "port": 80,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "address": "www.speedtest.net",
+                            "port": 443,
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiTWRzeVVzOGVncXprWCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWnVVVEZVUDZHbW55UCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
-                    "security": "none",
+                    "security": "tls",
+                    "tlsSettings": {
+                        "serverName": "M206.nEteBiMARZ.WORKeRs.DEV",
+                        "fingerprint": "chrome",
+                        "alpn": [
+                            "http/1.1"
+                        ],
+                        "allowInsecure": false
+                    },
                     "sockopt": {
                         "domainStrategy": "UseIP",
                         "happyEyeballs": {
@@ -8311,25 +7697,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "modem.meysamgz003.workers.dev",
+                            "address": "104.21.44.21",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiaDZndUUxYXAiLCJwcm90b2NvbCI6InRyIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoic3FBQTdSNDQiLCJwcm90b2NvbCI6InRyIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "ModeM.meysaMgz003.WOrkers.deV",
+                        "serverName": "m206.NeteBiMarZ.WOrKeRs.dEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -8348,25 +7735,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "www.speedtest.net",
+                            "address": "172.67.193.244",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoic2F6a1JCYWVuc3Z1S1Y2QSIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiTW5wZ3FVck1sIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "modEM.MEYsamgZ003.WORkErS.DEV",
+                        "serverName": "m206.neTEbimARz.WoRkErs.deV",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -8385,25 +7773,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "104.21.42.33",
+                            "address": "[2606:4700:3036::6815:2c15]",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiYnFOQ1hEanRMIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiRmF6c2hhVDhwYmtoaURJNCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "mODeM.meYsaMgZ003.WorKers.Dev",
+                        "serverName": "M206.NETEBimArz.WOrkERS.deV",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -8422,25 +7811,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "172.67.199.187",
+                            "address": "[2606:4700:3031::ac43:c1f4]",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiVlhWcjVYZDE1RiIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoieEJMSGV4VTZleFNtVyIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "mODem.mEysAmGz003.workErs.dEv",
+                        "serverName": "m206.NETEbimaRz.WOrkeRS.dev",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -8459,25 +7849,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "[2606:4700:3035::6815:2a21]",
+                            "address": "162.159.6.32",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiRHIzNnRqbUNyYm95QyIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoidWtPZnJIMVpKVCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "mOdEm.meysamGZ003.WOrKErs.DEV",
+                        "serverName": "m206.nETEbimArZ.wOrkERs.DEV",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -8496,25 +7887,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "[2606:4700:3033::ac43:c7bb]",
+                            "address": "172.66.160.143",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoidGRIM3M3dG13IiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiVng5MFVtZHJBaHc1IiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "MOdeM.MeysaMgZ003.WORKERS.DEv",
+                        "serverName": "m206.NETeBimArZ.wOrkERs.dev",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -8533,25 +7925,26 @@
                 "settings": {
                     "servers": [
                         {
-                            "address": "104.24.48.199",
+                            "address": "104.24.3.55",
                             "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
+                            "password": "2WmgJ:]49I7i&$Z9"
                         }
                     ]
                 },
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoibkhrdmllbDNSTFNiIiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
+                        "host": "m206.netebimarz.workers.dev",
+                        "path": "/eyJqdW5rIjoiWWprNUtvV3g3VCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
                     },
                     "security": "tls",
                     "tlsSettings": {
-                        "serverName": "MODEm.mEySaMGZ003.WoRKeRs.dEv",
+                        "serverName": "M206.NetEBiMARz.woRkErs.dEv",
                         "fingerprint": "chrome",
                         "alpn": [
                             "http/1.1"
-                        ]
+                        ],
+                        "allowInsecure": false
                     },
                     "sockopt": {
                         "domainStrategy": "UseIP",
@@ -8566,87 +7959,9 @@
                 "tag": "proxy-36"
             },
             {
-                "protocol": "trojan",
-                "settings": {
-                    "servers": [
-                        {
-                            "address": "141.101.120.210",
-                            "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
-                        }
-                    ]
-                },
-                "streamSettings": {
-                    "network": "ws",
-                    "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoiOVlUV0x3OFRLYzV3IiwicHJvdG9jb2wiOiJ0ciIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOltdfQ==?ed=2560"
-                    },
-                    "security": "tls",
-                    "tlsSettings": {
-                        "serverName": "MODEM.MEysaMgz003.wOrKers.deV",
-                        "fingerprint": "chrome",
-                        "alpn": [
-                            "http/1.1"
-                        ]
-                    },
-                    "sockopt": {
-                        "domainStrategy": "UseIP",
-                        "happyEyeballs": {
-                            "tryDelayMs": 250,
-                            "prioritizeIPv6": false,
-                            "interleave": 2,
-                            "maxConcurrentTry": 4
-                        }
-                    }
-                },
-                "tag": "proxy-37"
-            },
-            {
-                "protocol": "trojan",
-                "settings": {
-                    "servers": [
-                        {
-                            "address": "162.159.195.98",
-                            "port": 443,
-                            "password": "W7Qz@8]I}a[qPAAU"
-                        }
-                    ]
-                },
-                "streamSettings": {
-                    "network": "ws",
-                    "wsSettings": {
-                        "host": "modem.meysamgz003.workers.dev",
-                        "path": "/eyJqdW5rIjoicTJwaWZOODdxVDZKUCIsInByb3RvY29sIjoidHIiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560"
-                    },
-                    "security": "tls",
-                    "tlsSettings": {
-                        "serverName": "modem.meysAmgZ003.wORkers.deV",
-                        "fingerprint": "chrome",
-                        "alpn": [
-                            "http/1.1"
-                        ]
-                    },
-                    "sockopt": {
-                        "domainStrategy": "UseIP",
-                        "happyEyeballs": {
-                            "tryDelayMs": 250,
-                            "prioritizeIPv6": false,
-                            "interleave": 2,
-                            "maxConcurrentTry": 4
-                        }
-                    }
-                },
-                "tag": "proxy-38"
-            },
-            {
                 "protocol": "dns",
                 "settings": {
-                    "rules": [
-                        {
-                            "action": "hijack"
-                        }
-                    ]
+                    "nonIPQuery": "reject"
                 },
                 "tag": "dns-out"
             },
