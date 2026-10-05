@@ -1,0 +1,5 @@
+hysteria2://263d9cd5-94e3-4f1e-895f-9bada41d43f4@51.75.118.17:20022?sni=www.google.com&insecure=1&allowInsecure=1&obfs=salamander&obfs-password=013d24e218f53e24#Hy2%20Fast%20%7C%2013Mehr
+vless://263d9cd5-94e3-4f1e-895f-9bada41d43f4@51.75.118.17:20022?encryption=none&security=none&type=ws&host=51.75.118.17&path=%2Falibat-ws#Vless%20%7C%2013-Mehr
+vless://263d9cd5-94e3-4f1e-895f-9bada41d43f4@51.75.118.17:20022?encryption=none&security=none&type=grpc&authority=&serviceName=alibat-grpc&mode=gun#gRPC%20%7C%2013Mehr
+trojan://263d9cd5-94e3-4f1e-895f-9bada41d43f4@51.75.118.17:20022?security=tls&insecure=0&allowInsecure=0&type=ws&host=51.75.118.17&path=%2Falibat-trojan#Trojan%20%7C%2013-Mehr
+vless://263d9cd5-94e3-4f1e-895f-9bada41d43f4@51.75.118.17:20022?encryption=none&security=none&type=httpupgrade&path=%2Falibat-hu#HU%20%7C%2013Mehr
